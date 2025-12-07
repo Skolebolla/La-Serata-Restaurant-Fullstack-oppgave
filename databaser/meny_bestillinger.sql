@@ -1,7 +1,7 @@
-DROP TABLE IF EXISTS bestillinger;
-DROP TABLE IF EXISTS rett_har_allergi;
-DROP TABLE IF EXISTS allergier;
-DROP TABLE IF EXISTS meny;
+DROP TABLE IF EXISTS bord_bestillinger CASCADE;
+DROP TABLE IF EXISTS rett_har_allergi CASCADE;
+DROP TABLE IF EXISTS allergier CASCADE;
+DROP TABLE IF EXISTS meny CASCADE;
 
 CREATE TABLE meny (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -11,12 +11,16 @@ CREATE TABLE meny (
     kategori VARCHAR(50)
 );
 
-CREATE TABLE bestillinger (
+CREATE TABLE bord_bestillinger (
     id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    kunde VARCHAR(100) NOT NULL,
-    meny_id INTEGER NOT NULL,
+    fornavn VARCHAR(100) NOT NULL,
+    etternavn VARCHAR(100) NOT NULL,
+    tlf INTEGER NOT NULL,
+    epost VARCHAR(100) NOT NULL,
+    antall_personer INTEGER NOT NULL,
     dato DATE NOT NULL,
-    FOREIGN KEY (meny_id) REFERENCES meny(id)
+    klokkeslett TIME NOT NULL,
+    kommentar TEXT
 );
 
 CREATE TABLE allergier (
@@ -60,16 +64,16 @@ VALUES
     (5, 5), -- Sushi har Fisk
     (5, 6); -- Sushi har Skalldyr
 
-INSERT INTO bestillinger (kunde, meny_id, dato)
+INSERT INTO bord_bestillinger (fornavn, etternavn, tlf, epost, antall_personer, dato, klokkeslett, kommentar)
 VALUES
-    ('Ola', 1, '2025-12-07'),
-    ('Kari', 3, '2025-12-08'),
-    ('Per', 2, '2025-12-09'),
-    ('Lise', 5, '2025-12-10'),
-    ('Nina', 4, '2025-12-11');
+    ('Ola', 'Nordmann', 12345678, 'olanordmann@gmail.no', 4, '2024-07-15', '19:00', 'Sønnen min liker ikke støy, så et rolig bord hvis mulig'),
+    ('Kari', 'Nordkvinne', 87654321, 'karinordkvinne@gmail.no', 2, '2024-07-16', '20:00', 'Vegetarisk mat'),
+    ('Per', 'Hansen', 23456789, 'perhansen@icloud.com', 6, '2024-07-17', '18:30', 'Barn med allergi mot nøtter'),
+    ('Lise', 'Olsen', 98765432, 'liseolsen@outlook.com', 3, '2024-07-18', '19:30', 'Bord med utsikt hvis mulig'),
+    ('Mona', 'Larsen', 34567890, 'monalarsen@icloud.com', 5, '2024-07-19', '20:00', 'Feirer bursdag');
 
 SELECT * FROM meny ORDER BY pris;
-SELECT * FROM bestillinger ORDER BY dato;
+SELECT * FROM bord_bestillinger ORDER BY dato;
 
 -- Finn alle retter som inneholder gluten:
 SELECT m.rett, m.pris
